@@ -1,0 +1,37 @@
+# Docker Compose file for Fellow4U application
+services:
+  # Database Service
+  db:
+    image: postgres:15-alpine
+    container_name: fellow4u_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: P@sswordd
+      POSTGRES_DB: fellow4u
+    ports:
+      - "5432:5432"
+    volumes:
+      # Tự động chạy file init.sql khi khởi tạo DB lần đầu
+      - ./database:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+
+  # Backend Service (Node.js)
+  backend:
+    build: ../backend
+    container_name: fellow4u_api
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: admin
+      DB_PASS: P@sswordd
+      DB_NAME: fellow4u
+      JWT_SECRET: your_jwt_secret_key_here_ok
+      NODE_ENV: development
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
