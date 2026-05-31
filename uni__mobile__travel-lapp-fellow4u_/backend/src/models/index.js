@@ -27,6 +27,9 @@ const CollectionTour = require('./CollectionTour');
 const Booking = require('./Booking');
 const BookingBid = require('./BookingBid');
 const BookingStatusHistory = require('./BookingStatusHistory');
+const Payment = require('./Payment');
+const UserPaymentMethod = require('./UserPaymentMethod');
+const RefundRequest = require('./RefundRequest');
 const ChatRoom = require('./ChatRoom');
 const Message = require('./Message');
 const Notification = require('./Notification')(sequelize);
@@ -161,6 +164,19 @@ GuideProfile.hasMany(BookingBid, { foreignKey: 'guide_id' });
 Booking.hasMany(BookingStatusHistory, { foreignKey: 'booking_id', as: 'StatusHistory' });
 BookingStatusHistory.belongsTo(Booking, { foreignKey: 'booking_id' });
 
+// Associations - Module 9 (Payment & Checkout)
+User.hasMany(UserPaymentMethod, { foreignKey: 'user_id', as: 'PaymentMethods' });
+UserPaymentMethod.belongsTo(User, { foreignKey: 'user_id' });
+
+Booking.hasMany(Payment, { foreignKey: 'booking_id', as: 'Payments' });
+Payment.belongsTo(Booking, { foreignKey: 'booking_id' });
+
+User.hasMany(Payment, { foreignKey: 'user_id', as: 'UserPayments' });
+Payment.belongsTo(User, { foreignKey: 'user_id' });
+
+Payment.hasMany(RefundRequest, { foreignKey: 'payment_id', as: 'Refunds' });
+RefundRequest.belongsTo(Payment, { foreignKey: 'payment_id' });
+
 // Associations - Module 10 (Messaging System)
 ChatRoom.belongsTo(Booking, { foreignKey: 'booking_id' });
 Booking.hasOne(ChatRoom, { foreignKey: 'booking_id' });
@@ -242,5 +258,8 @@ module.exports = {
   UserJourney,
   UserSetting,
   SecurityLog,
-  JourneyMedia
+  JourneyMedia,
+  Payment,
+  UserPaymentMethod,
+  RefundRequest
 };

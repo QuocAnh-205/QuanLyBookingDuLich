@@ -27,6 +27,7 @@ app.use('/api/bookings', require('./src/routes/bookingRoutes'));
 app.use('/api/chats', require('./src/routes/chatRoutes'));
 app.use('/api/notifications', require('./src/routes/notificationRoutes'));
 app.use('/api/profile', require('./src/routes/profileRoutes'));
+app.use('/api/payments', require('./src/routes/paymentRoutes'));
 
 // Database Connection & Server Start
 const startServer = async () => {

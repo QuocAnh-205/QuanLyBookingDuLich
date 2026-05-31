@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/detail_provider.dart';
 import '../widgets/detail_error_view.dart';
+import '../../../payment/presentation/screens/checkout_screen.dart';
 
 class TourDetailScreen extends StatefulWidget {
   final int tourId;
@@ -251,7 +252,20 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => CheckoutScreen(
+                            tourId: tour.basicInfo.id,
+                            tourTitle: tour.basicInfo.title,
+                            tourPrice: tour.basicInfo.price,
+                            durationDays: tour.basicInfo.durationDays,
+                            locationName: tour.basicInfo.locationName,
+                            thumbnailUrl: tour.basicInfo.thumbnailUrl,
+                          ),
+                        ),
+                      );
+                    },
                     child: const Text('Book Now', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                 ),

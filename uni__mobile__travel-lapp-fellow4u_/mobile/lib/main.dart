@@ -18,6 +18,7 @@ import 'features/trips/presentation/provider/trips_provider.dart';
 import 'features/chat/presentation/provider/chat_provider.dart';
 import 'features/notifications/presentation/provider/notification_provider.dart';
 import 'features/profile/presentation/provider/profile_provider.dart';
+import 'features/payment/presentation/provider/payment_provider.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -42,6 +43,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()..setMockProfile()),
+        ChangeNotifierProvider(create: (_) => PaymentProvider()),
       ],
       child: const Fellow4UApp(),
     ),
