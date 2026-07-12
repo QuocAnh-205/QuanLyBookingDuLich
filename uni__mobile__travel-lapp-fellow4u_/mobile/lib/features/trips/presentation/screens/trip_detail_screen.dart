@@ -37,7 +37,9 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
       body: Consumer<TripsProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator(color: Color(0xFF00CEA6)));
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF00CEA6)),
+            );
           }
 
           if (provider.error != null) {
@@ -47,7 +49,10 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                 children: [
                   const Icon(Icons.error_outline, size: 64, color: Colors.red),
                   const SizedBox(height: 16),
-                  Text(provider.error!, style: const TextStyle(color: Colors.red)),
+                  Text(
+                    provider.error!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
@@ -84,7 +89,8 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                       _buildSectionTitle('Meeting Point'),
                       _buildLocationCard(trip),
                       const SizedBox(height: 24),
-                      if (trip.specialRequests != null && trip.specialRequests!.isNotEmpty) ...[
+                      if (trip.specialRequests != null &&
+                          trip.specialRequests!.isNotEmpty) ...[
                         _buildSectionTitle('Special Requests'),
                         _buildRequestCard(trip),
                         const SizedBox(height: 24),
@@ -118,13 +124,14 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
         background: Stack(
           fit: StackFit.expand,
           children: [
-              Hero(
-                tag: 'trip_image_${trip.id}',
-                child: Image.network(
-                  trip.tour?.thumbnailUrl ?? 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop',
-                  fit: BoxFit.cover,
-                ),
+            Hero(
+              tag: 'trip_image_${trip.id}',
+              child: Image.network(
+                trip.tour?.thumbnailUrl ??
+                    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop',
+                fit: BoxFit.cover,
               ),
+            ),
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -158,7 +165,10 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
             children: [
               Text(
                 trip.tour?.title ?? 'Custom Trip Request',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               TripStatusBadge(status: trip.status),
@@ -198,13 +208,29 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
       ),
       child: Column(
         children: [
-          _buildDetailItem(Icons.calendar_today, 'Date', dateFormat.format(trip.startDate)),
+          _buildDetailItem(
+            Icons.calendar_today,
+            'Date',
+            dateFormat.format(trip.startDate),
+          ),
           const Divider(height: 24),
-          _buildDetailItem(Icons.access_time, 'Time', '${timeFormat.format(trip.startDate)} - ${timeFormat.format(trip.endDate)}'),
+          _buildDetailItem(
+            Icons.access_time,
+            'Time',
+            '${timeFormat.format(trip.startDate)} - ${timeFormat.format(trip.endDate)}',
+          ),
           const Divider(height: 24),
-          _buildDetailItem(Icons.monetization_on_outlined, 'Total Price', '\$${trip.totalPrice.toStringAsFixed(2)}'),
+          _buildDetailItem(
+            Icons.monetization_on_outlined,
+            'Total Price',
+            '\$${trip.totalPrice.toStringAsFixed(2)}',
+          ),
           const Divider(height: 24),
-          _buildDetailItem(Icons.account_balance_wallet_outlined, 'Deposit', '\$${trip.depositAmount.toStringAsFixed(2)}'),
+          _buildDetailItem(
+            Icons.account_balance_wallet_outlined,
+            'Deposit',
+            '\$${trip.depositAmount.toStringAsFixed(2)}',
+          ),
         ],
       ),
     );
@@ -225,8 +251,14 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-            Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            Text(
+              label,
+              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+            ),
+            Text(
+              value,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           ],
         ),
       ],
@@ -296,37 +328,47 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
     }
 
     return Column(
-      children: trip.bids.map((bid) => Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Colors.grey[200]!),
-        ),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(12),
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(bid.guide.avatarUrl),
-          ),
-          title: Text(bid.guide.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Offered: \$${bid.offeredPrice}'),
-              if (bid.message != null) Text(bid.message!, style: const TextStyle(fontSize: 12)),
-            ],
-          ),
-          trailing: ElevatedButton(
-            onPressed: () => _handleSelectBid(trip.id, bid.id, provider),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF00CEA6),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      children: trip.bids
+          .map(
+            (bid) => Card(
+              margin: const EdgeInsets.only(bottom: 12),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: Colors.grey[200]!),
+              ),
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(12),
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(bid.guide.avatarUrl),
+                ),
+                title: Text(
+                  bid.guide.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Offered: \$${bid.offeredPrice}'),
+                    if (bid.message != null)
+                      Text(bid.message!, style: const TextStyle(fontSize: 12)),
+                  ],
+                ),
+                trailing: ElevatedButton(
+                  onPressed: () => _handleSelectBid(trip.id, bid.id, provider),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF00CEA6),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text('Accept'),
+                ),
+              ),
             ),
-            child: const Text('Accept'),
-          ),
-        ),
-      )).toList(),
+          )
+          .toList(),
     );
   }
 
@@ -392,20 +434,33 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, -5)),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
           ],
         ),
         child: SafeArea(
           child: SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
-              onPressed: () => _handleUpdateStatus(trip.id, 'completed', provider),
+              onPressed: () =>
+                  _handleUpdateStatus(trip.id, 'completed', provider),
               icon: const Icon(Icons.check, color: Colors.black),
-              label: const Text('Mark Finished', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+              label: const Text(
+                'Mark Finished',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 side: const BorderSide(color: Colors.grey),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
           ),
@@ -419,7 +474,11 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, -5)),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
           ],
         ),
         child: SafeArea(
@@ -428,12 +487,23 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () => _handleChat(),
-                  icon: const Icon(Icons.chat_bubble_outline, color: Color(0xFF00CEA6)),
-                  label: const Text('Chat', style: TextStyle(color: Color(0xFF00CEA6), fontWeight: FontWeight.bold)),
+                  icon: const Icon(
+                    Icons.chat_bubble_outline,
+                    color: Color(0xFF00CEA6),
+                  ),
+                  label: const Text(
+                    'Chat',
+                    style: TextStyle(
+                      color: Color(0xFF00CEA6),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     side: const BorderSide(color: Color(0xFF00CEA6)),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
               ),
@@ -442,12 +512,17 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                 child: ElevatedButton.icon(
                   onPressed: () => _handlePayment(trip),
                   icon: const Icon(Icons.payment, color: Colors.white),
-                  label: const Text('Pay', style: TextStyle(fontWeight: FontWeight.bold)),
+                  label: const Text(
+                    'Pay',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF00CEA6),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     elevation: 0,
                   ),
                 ),
@@ -463,7 +538,11 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, -5)),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
         ],
       ),
       child: SafeArea(
@@ -475,15 +554,21 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   side: const BorderSide(color: Color(0xFF00CEA6)),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-                child: const Text('Chat with Guide', style: TextStyle(color: Color(0xFF00CEA6), fontWeight: FontWeight.bold)),
+                child: const Text(
+                  'Chat with Guide',
+                  style: TextStyle(
+                    color: Color(0xFF00CEA6),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 16),
-            Expanded(
-              child: _buildMainActionButton(trip, provider),
-            ),
+            Expanded(child: _buildMainActionButton(trip, provider)),
           ],
         ),
       ),
@@ -532,27 +617,43 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
   }
 
   // Handlers
-  void _handleSelectBid(int bookingId, int bidId, TripsProvider provider) async {
+  void _handleSelectBid(
+    int bookingId,
+    int bidId,
+    TripsProvider provider,
+  ) async {
     final token = context.read<AuthProvider>().token;
     if (token == null) return;
 
     final success = await provider.selectBid(bookingId, bidId, token);
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Bid selected successfully!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Bid selected successfully!')),
+      );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(provider.error ?? 'Failed to select bid')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(provider.error ?? 'Failed to select bid')),
+      );
     }
   }
 
-  void _handleUpdateStatus(int id, String status, TripsProvider provider) async {
+  void _handleUpdateStatus(
+    int id,
+    String status,
+    TripsProvider provider,
+  ) async {
     final token = context.read<AuthProvider>().token;
     if (token == null) return;
 
     final success = await provider.updateStatus(id, status, token);
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Trip status updated to $status')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Trip status updated to $status')));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(provider.error ?? 'Failed to update status')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(provider.error ?? 'Failed to update status')),
+      );
     }
   }
 
@@ -588,10 +689,17 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
     if (result == true && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Thanks! Check out successfully. Enjoy your trip!', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          content: const Text(
+            'Thanks! Check out successfully. Enjoy your trip!',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
           backgroundColor: const Color(0xFF81C784), // Lighter green matching UI
           behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 150, left: 16, right: 16),
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).size.height - 150,
+            left: 16,
+            right: 16,
+          ),
         ),
       );
       Navigator.pop(context);

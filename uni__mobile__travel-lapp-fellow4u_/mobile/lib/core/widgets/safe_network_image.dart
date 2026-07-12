@@ -40,7 +40,8 @@ class SafeNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = imageUrl.trim();
 
-    if (url.isEmpty || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+    if (url.isEmpty ||
+        (!url.startsWith('http://') && !url.startsWith('https://'))) {
       return ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.zero,
         child: _buildFallback(),
@@ -64,7 +65,7 @@ class SafeNetworkImage extends StatelessWidget {
               child: CircularProgressIndicator(
                 value: loadingProgress.expectedTotalBytes != null
                     ? loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes!
+                          loadingProgress.expectedTotalBytes!
                     : null,
                 color: const Color(0xFF00CEA6),
                 strokeWidth: 2,

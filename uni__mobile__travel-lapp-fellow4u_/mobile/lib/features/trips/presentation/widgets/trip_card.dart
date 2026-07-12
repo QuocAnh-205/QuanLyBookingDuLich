@@ -45,13 +45,16 @@ class TripCard extends StatelessWidget {
               Hero(
                 tag: 'trip_image_${trip.id}',
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(12),
+                  ),
                   child: Image.network(
-                  trip.tour?.thumbnailUrl ?? 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop',
-                  height: 180,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
+                    trip.tour?.thumbnailUrl ??
+                        'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop',
+                    height: 180,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
                       height: 180,
                       color: Colors.grey[200],
                       child: const Icon(Icons.image, color: Colors.grey),
@@ -64,7 +67,10 @@ class TripCard extends StatelessWidget {
                 top: 12,
                 left: 12,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.9),
                     borderRadius: BorderRadius.circular(20),
@@ -91,7 +97,11 @@ class TripCard extends StatelessWidget {
                 left: 12,
                 child: Row(
                   children: [
-                    const Icon(Icons.location_on, size: 18, color: Colors.white),
+                    const Icon(
+                      Icons.location_on,
+                      size: 18,
+                      color: Colors.white,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       trip.tour?.locationName ?? 'Custom Location',
@@ -100,7 +110,11 @@ class TripCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                         shadows: [
-                          Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(0, 1)),
+                          Shadow(
+                            color: Colors.black45,
+                            blurRadius: 4,
+                            offset: Offset(0, 1),
+                          ),
                         ],
                       ),
                     ),
@@ -125,13 +139,22 @@ class TripCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    _buildDetailRow(Icons.calendar_today_outlined, dateFormat.format(trip.startDate)),
+                    _buildDetailRow(
+                      Icons.calendar_today_outlined,
+                      dateFormat.format(trip.startDate),
+                    ),
                     const SizedBox(height: 8),
-                    _buildDetailRow(Icons.access_time, '${timeFormat.format(trip.startDate)} - ${timeFormat.format(trip.endDate)}'),
+                    _buildDetailRow(
+                      Icons.access_time,
+                      '${timeFormat.format(trip.startDate)} - ${timeFormat.format(trip.endDate)}',
+                    ),
                     const SizedBox(height: 8),
-                    _buildDetailRow(Icons.person_outline, trip.guide?.name ?? 'No guide assigned'),
+                    _buildDetailRow(
+                      Icons.person_outline,
+                      trip.guide?.name ?? 'No guide assigned',
+                    ),
                     const SizedBox(height: 16),
-                    
+
                     OutlinedButton.icon(
                       onPressed: onDetail,
                       icon: const Icon(Icons.info_outline, size: 18),
@@ -155,7 +178,10 @@ class TripCard extends StatelessWidget {
                       padding: const EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: const Color(0xFF00CEA6), width: 2),
+                        border: Border.all(
+                          color: const Color(0xFF00CEA6),
+                          width: 2,
+                        ),
                       ),
                       child: CircleAvatar(
                         radius: 32,

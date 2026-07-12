@@ -55,7 +55,9 @@ class _GuideDetailScreenState extends State<GuideDetailScreen> {
                     fit: StackFit.expand,
                     children: [
                       Image.network(
-                        guide.coverUrl.isNotEmpty ? guide.coverUrl : 'https://www.agoda.com/wp-content/uploads/2024/04/Featured-image-Han-River-at-night-in-Seoul-South-Korea.jpg',
+                        guide.coverUrl.isNotEmpty
+                            ? guide.coverUrl
+                            : 'https://www.agoda.com/wp-content/uploads/2024/04/Featured-image-Han-River-at-night-in-Seoul-South-Korea.jpg',
                         fit: BoxFit.cover,
                       ),
                       const DecoratedBox(
@@ -84,7 +86,9 @@ class _GuideDetailScreenState extends State<GuideDetailScreen> {
                         children: [
                           CircleAvatar(
                             radius: 40,
-                            backgroundImage: NetworkImage(guide.basicInfo.avatarUrl),
+                            backgroundImage: NetworkImage(
+                              guide.basicInfo.avatarUrl,
+                            ),
                           ),
                           const SizedBox(width: 20),
                           Column(
@@ -92,18 +96,34 @@ class _GuideDetailScreenState extends State<GuideDetailScreen> {
                             children: [
                               Text(
                                 guide.basicInfo.name,
-                                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               Row(
                                 children: [
-                                  const Icon(Icons.location_on, size: 16, color: Color(0xFF00CEA6)),
-                                  Text(guide.basicInfo.locationName, style: const TextStyle(color: Colors.grey)),
+                                  const Icon(
+                                    Icons.location_on,
+                                    size: 16,
+                                    color: Color(0xFF00CEA6),
+                                  ),
+                                  Text(
+                                    guide.basicInfo.locationName,
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
                                 ],
                               ),
                               Row(
                                 children: [
-                                  const Icon(Icons.star, size: 16, color: Colors.amber),
-                                  Text('${guide.basicInfo.rating} (${guide.basicInfo.totalReviews} reviews)'),
+                                  const Icon(
+                                    Icons.star,
+                                    size: 16,
+                                    color: Colors.amber,
+                                  ),
+                                  Text(
+                                    '${guide.basicInfo.rating} (${guide.basicInfo.totalReviews} reviews)',
+                                  ),
                                 ],
                               ),
                             ],
@@ -112,20 +132,47 @@ class _GuideDetailScreenState extends State<GuideDetailScreen> {
                       ),
 
                       const SizedBox(height: 30),
-                      const Text('About Me', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      const Text(
+                        'About Me',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 10),
-                      Text(guide.bio, style: const TextStyle(fontSize: 16, color: Colors.black87, height: 1.5)),
-
-                      const SizedBox(height: 30),
-                      const Text('Languages', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 10),
-                      Wrap(
-                        spacing: 10,
-                        children: guide.languages.map((l) => Chip(label: Text(l.name))).toList(),
+                      Text(
+                        guide.bio,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                          height: 1.5,
+                        ),
                       ),
 
                       const SizedBox(height: 30),
-                      const Text('Portfolio', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      const Text(
+                        'Languages',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 10,
+                        children: guide.languages
+                            .map((l) => Chip(label: Text(l.name)))
+                            .toList(),
+                      ),
+
+                      const SizedBox(height: 30),
+                      const Text(
+                        'Portfolio',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       SizedBox(
                         height: 150,
@@ -139,7 +186,9 @@ class _GuideDetailScreenState extends State<GuideDetailScreen> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 image: DecorationImage(
-                                  image: NetworkImage(guide.portfolio[index].url),
+                                  image: NetworkImage(
+                                    guide.portfolio[index].url,
+                                  ),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -149,31 +198,66 @@ class _GuideDetailScreenState extends State<GuideDetailScreen> {
                       ),
 
                       const SizedBox(height: 30),
-                      const Text('Pricing Tiers', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      const Text(
+                        'Pricing Tiers',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 10),
-                      ...guide.pricings.map((p) => ListTile(
-                        leading: const Icon(Icons.people_outline, color: Color(0xFF00CEA6)),
-                        title: Text('${p.minTravelers} - ${p.maxTravelers} Travelers'),
-                        trailing: Text('\$${p.pricePerHour.toStringAsFixed(0)}/hr', style: const TextStyle(fontWeight: FontWeight.bold)),
-                      )),
-
-                      const SizedBox(height: 30),
-                      const Text('Reviews', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 10),
-                      ...guide.reviews.map((r) => Card(
-                        margin: const EdgeInsets.only(bottom: 15),
-                        child: ListTile(
-                          leading: CircleAvatar(backgroundImage: NetworkImage(r.authorAvatar)),
-                          title: Text(r.authorName),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(children: List.generate(r.rating, (index) => const Icon(Icons.star, size: 14, color: Colors.amber))),
-                              Text(r.comment),
-                            ],
+                      ...guide.pricings.map(
+                        (p) => ListTile(
+                          leading: const Icon(
+                            Icons.people_outline,
+                            color: Color(0xFF00CEA6),
+                          ),
+                          title: Text(
+                            '${p.minTravelers} - ${p.maxTravelers} Travelers',
+                          ),
+                          trailing: Text(
+                            '\$${p.pricePerHour.toStringAsFixed(0)}/hr',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                      )),
+                      ),
+
+                      const SizedBox(height: 30),
+                      const Text(
+                        'Reviews',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ...guide.reviews.map(
+                        (r) => Card(
+                          margin: const EdgeInsets.only(bottom: 15),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(r.authorAvatar),
+                            ),
+                            title: Text(r.authorName),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: List.generate(
+                                    r.rating,
+                                    (index) => const Icon(
+                                      Icons.star,
+                                      size: 14,
+                                      color: Colors.amber,
+                                    ),
+                                  ),
+                                ),
+                                Text(r.comment),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 80),
                     ],
                   ),
@@ -193,10 +277,19 @@ class _GuideDetailScreenState extends State<GuideDetailScreen> {
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF00CEA6),
             minimumSize: const Size(double.infinity, 50),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
           ),
           onPressed: () {},
-          child: const Text('Contact Now', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+          child: const Text(
+            'Contact Now',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );
