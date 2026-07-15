@@ -115,6 +115,39 @@ class ProfileService {
     }
   }
 
+  Future<List<dynamic>> fetchPhotos(String token) async {
+    try {
+      final response = await _dio.get(
+        'profile/photos',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.data['success']) {
+        return response.data['data'];
+      } else {
+        throw response.data['message'] ?? 'Failed to load photos';
+      }
+    } on DioException catch (e) {
+      throw e.message ?? 'Failed to load photos';
+    }
+  }
+
+  Future<Map<String, dynamic>> createJourney(Map<String, dynamic> data, String token) async {
+    try {
+      final response = await _dio.post(
+        'profile/journeys',
+        data: data,
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.data['success']) {
+        return response.data['data'];
+      } else {
+        throw response.data['message'] ?? 'Failed to create journey';
+      }
+    } on DioException catch (e) {
+      throw e.message ?? 'Failed to create journey';
+    }
+  }
+
   Future<void> changePassword(Map<String, dynamic> data, String token) async {
     try {
       final response = await _dio.put(

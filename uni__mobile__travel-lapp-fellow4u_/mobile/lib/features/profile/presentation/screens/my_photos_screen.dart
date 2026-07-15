@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../auth/providers/auth_provider.dart';
 import '../provider/profile_provider.dart';
+import 'add_photo_screen.dart';
 
 class MyPhotosScreen extends StatelessWidget {
   const MyPhotosScreen({super.key});
@@ -9,7 +10,8 @@ class MyPhotosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = context.watch<ProfileProvider>();
-    final photos = profileProvider.profile?.photos ?? [];
+    final photos = profileProvider.allPhotos;
+    final token = context.read<AuthProvider>().token;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -24,80 +26,144 @@ class MyPhotosScreen extends StatelessWidget {
           'My Photos',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_a_photo_outlined, color: Color(0xFF00CEA6)),
-            onPressed: () => _showAddPhotoDialog(context),
-          ),
-        ],
       ),
-      body: photos.isEmpty
-          ? const Center(child: Text('No photos yet', style: TextStyle(color: Colors.grey)))
-          : GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-              ),
-              itemCount: photos.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () => _showFullImage(context, photos[index].imageUrl),
-                  child: Hero(
-                    tag: 'photo_${photos[index].id}',
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: DecorationImage(
-                          image: NetworkImage(photos[index].imageUrl),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(16),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 1,
+        ),
+        itemCount: photos.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AddPhotoScreen()),
                 );
               },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFF00CEA6), width: 1.5),
+                  color: const Color(0xFF00CEA6).withOpacity(0.02),
+                ),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.add, color: Color(0xFF00CEA6), size: 30),
+                    SizedBox(height: 8),
+                    Text(
+                      'Add Photos',
+                      style: TextStyle(
+                        color: Color(0xFF00CEA6),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          final photo = photos[index - 1];
+          return GestureDetector(
+            onTap: () => _showPhotoOptions(context, photo, token),
+            child: Hero(
+              tag: 'photo_${photo.id}',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  photo.imageUrl,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      color: Colors.grey[100],
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Color(0xFF00CEA6),
+                        ),
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[200],
+                      child: const Icon(Icons.broken_image_outlined, color: Colors.grey),
+                    );
+                  },
+                ),
+              ),
             ),
+          );
+        },
+      ),
     );
   }
 
-  void _showAddPhotoDialog(BuildContext context) {
-    final controller = TextEditingController();
+  void _showPhotoOptions(BuildContext context, dynamic photo, String? token) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.fullscreen, color: Colors.black87),
+                title: const Text('View Image'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showFullImage(context, photo.imageUrl);
+                },
+              ),
+              if (token != null)
+                ListTile(
+                  leading: const Icon(Icons.delete_outline, color: Colors.red),
+                  title: const Text('Delete Photo', style: TextStyle(color: Colors.red)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _confirmDelete(context, photo.id, token);
+                  },
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _confirmDelete(BuildContext context, int photoId, String token) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Add New Photo'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            hintText: 'Enter image URL',
-            border: OutlineInputBorder(),
-          ),
-        ),
+        title: const Text('Delete Photo'),
+        content: const Text('Are you sure you want to delete this photo?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
           ),
-          ElevatedButton(
+          TextButton(
             onPressed: () async {
-              final url = controller.text.trim();
-              if (url.isNotEmpty) {
-                final token = context.read<AuthProvider>().token;
-                if (token != null) {
-                  final success = await context.read<ProfileProvider>().addPhoto(url, token);
-                  if (success && context.mounted) {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Photo added successfully')),
-                    );
-                  }
-                }
+              Navigator.pop(context);
+              final success = await context.read<ProfileProvider>().deletePhoto(photoId, token);
+              if (success && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Photo deleted successfully')),
+                );
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF00CEA6)),
-            child: const Text('Add', style: TextStyle(color: Colors.white)),
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -119,11 +185,8 @@ class MyPhotosScreen extends StatelessWidget {
             ),
           ),
           body: Center(
-            child: Hero(
-              tag: 'photo_full', // simplified for demo
-              child: InteractiveViewer(
-                child: Image.network(url),
-              ),
+            child: InteractiveViewer(
+              child: Image.network(url),
             ),
           ),
         ),

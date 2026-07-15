@@ -177,6 +177,21 @@ const createJourney = async (req, res) => {
   }
 };
 
+// @desc    Get user photos
+// @route   GET /api/profile/photos
+// @access  Private
+const getPhotos = async (req, res) => {
+  try {
+    const photos = await UserPhoto.findAll({
+      where: { user_id: req.user.user_id },
+      order: [['uploaded_at', 'DESC']]
+    });
+    res.json({ success: true, data: photos });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // @desc    Upload user photo record
 // @route   POST /api/profile/photos
 // @access  Private
@@ -295,6 +310,7 @@ module.exports = {
   getJourneys,
   createJourney,
   deleteJourney,
+  getPhotos,
   uploadPhoto,
   deletePhoto,
   getPublicProfile,

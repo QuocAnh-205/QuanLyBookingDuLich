@@ -9,6 +9,7 @@ const {
   getJourneys,
   createJourney,
   deleteJourney,
+  getPhotos,
   uploadPhoto,
   deletePhoto,
   getPublicProfile,
@@ -37,6 +38,7 @@ router.route('/journeys')
 router.delete('/journeys/:id', deleteJourney);
 
 router.route('/photos')
+  .get(getPhotos)
   .post(uploadPhoto);
 
 router.delete('/photos/:id', deletePhoto);

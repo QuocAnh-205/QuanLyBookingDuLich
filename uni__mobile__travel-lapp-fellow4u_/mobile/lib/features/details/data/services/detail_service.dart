@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/detail_models.dart';
 import '../../../explore/data/models/explore_models.dart';
+import '../../../../core/network/api_client.dart';
 
 class DetailService {
-  final String baseUrl = 'http://localhost:3000/api'; // Replace with your IP for real device
+  final String baseUrl = ApiClient.dio.options.baseUrl.endsWith('/')
+      ? ApiClient.dio.options.baseUrl.substring(0, ApiClient.dio.options.baseUrl.length - 1)
+      : ApiClient.dio.options.baseUrl;
 
   Future<TourDetailFull> getTourDetail(int id) async {
     final response = await http.get(Uri.parse('$baseUrl/services/tours/$id'));

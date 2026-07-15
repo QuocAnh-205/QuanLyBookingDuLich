@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/category_models.dart';
+import '../../../../core/network/api_client.dart';
 
 class CategoryService {
-  final String baseUrl = 'http://localhost:3000/api/categories';
+  final String baseUrl = '${ApiClient.dio.options.baseUrl.endsWith('/') ? ApiClient.dio.options.baseUrl.substring(0, ApiClient.dio.options.baseUrl.length - 1) : ApiClient.dio.options.baseUrl}/categories';
 
   Future<List<BannerModel>> getBanners(String pageType) async {
     final response = await http.get(Uri.parse('$baseUrl/banners?page_type=$pageType'));

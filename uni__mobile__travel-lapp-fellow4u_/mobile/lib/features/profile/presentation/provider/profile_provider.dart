@@ -6,10 +6,12 @@ class ProfileProvider extends ChangeNotifier {
   final ProfileService _profileService = ProfileService();
   
   UserProfile? _profile;
+  List<UserPhoto> _allPhotos = [];
   bool _isLoading = false;
   String? _error;
 
   UserProfile? get profile => _profile;
+  List<UserPhoto> get allPhotos => _allPhotos;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
@@ -22,12 +24,25 @@ class ProfileProvider extends ChangeNotifier {
     try {
       final data = await _profileService.fetchProfile(token);
       _profile = UserProfile.fromJson(data);
+      // Fetch all photos as well
+      await fetchPhotos(token);
     } catch (e) {
       _error = e.toString();
       debugPrint('Fetch Profile Error: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  // Fetch all photos
+  Future<void> fetchPhotos(String token) async {
+    try {
+      final data = await _profileService.fetchPhotos(token);
+      _allPhotos = data.map((p) => UserPhoto.fromJson(p)).toList();
+    } catch (e) {
+      _error = e.toString();
+      debugPrint('Fetch Photos Error: $e');
     }
   }
 
@@ -39,7 +54,6 @@ class ProfileProvider extends ChangeNotifier {
 
     try {
       final updatedData = await _profileService.updateProfile(data, token);
-      // Re-fetch or merge to ensure we have all associations
       await fetchProfile(token);
       return true;
     } catch (e) {
@@ -77,6 +91,7 @@ class ProfileProvider extends ChangeNotifier {
     try {
       await _profileService.deletePhoto(id, token);
       _profile?.photos.removeWhere((p) => p.id == id);
+      _allPhotos.removeWhere((p) => p.id == id);
       notifyListeners();
       return true;
     } catch (e) {
@@ -110,6 +125,7 @@ class ProfileProvider extends ChangeNotifier {
       }, token);
       final newPhoto = UserPhoto.fromJson(data);
       _profile?.photos.insert(0, newPhoto);
+      _allPhotos.insert(0, newPhoto);
       return true;
     } catch (e) {
       _error = e.toString();
@@ -120,9 +136,40 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  // Initial mock data (keep for offline testing if needed, but remove from main flow)
+  // Create journey via API
+  Future<bool> createJourney({
+    required String title,
+    required String locationName,
+    required String description,
+    required List<int> photoIds,
+    required String token,
+  }) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _profileService.createJourney({
+        'title': title,
+        'location_name': locationName,
+        'description': description,
+        'photo_ids': photoIds,
+      }, token);
+      await fetchProfile(token);
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Initial mock data
   void setMockProfile() {
-    // Already implemented in previous phase
+    // Already implemented
   }
 
   // Change password via API

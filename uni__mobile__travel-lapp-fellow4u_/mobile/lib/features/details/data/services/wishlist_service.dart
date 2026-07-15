@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../../../features/explore/data/models/explore_models.dart';
+import '../../../../core/network/api_client.dart';
 
 class WishlistService {
-  final String baseUrl = 'http://localhost:3000/api/wishlist';
+  final String baseUrl = '${ApiClient.dio.options.baseUrl.endsWith('/') ? ApiClient.dio.options.baseUrl.substring(0, ApiClient.dio.options.baseUrl.length - 1) : ApiClient.dio.options.baseUrl}/wishlist';
 
   Future<Map<String, dynamic>> toggleWishlist({
     int? tourId,

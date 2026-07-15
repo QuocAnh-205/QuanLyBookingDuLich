@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/search_models.dart';
+import '../../../../core/network/api_client.dart';
 
 class SearchService {
-  final String baseUrl = 'http://localhost:3000/api/search';
+  final String baseUrl = '${ApiClient.dio.options.baseUrl.endsWith('/') ? ApiClient.dio.options.baseUrl.substring(0, ApiClient.dio.options.baseUrl.length - 1) : ApiClient.dio.options.baseUrl}/search';
 
   Future<SearchResult> search({
     String? query,
