@@ -1,5 +1,5 @@
 const { Payment, UserPaymentMethod, RefundRequest, Booking, BookingStatusHistory, Tour, User, Location } = require('../models');
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 
 // Helper: Generate a fake transaction reference
 const generateTransactionRef = () => {
@@ -9,7 +9,7 @@ const generateTransactionRef = () => {
 // Helper: Simulate payment gateway processing
 const simulatePaymentGateway = (paymentMethod) => {
   // Simulate: card ending in 0002 always fails (for testing)
-  if (paymentMethod && paymentMethod.last_4 === '0002') {
+  if (paymentMethod?.last_4 === '0002') {
     return {
       success: false,
       error_code: 'card_declined',
@@ -61,7 +61,7 @@ const checkout = async (req, res) => {
     }
 
     // 3. Calculate total price
-    const basePrice = parseFloat(tour.price);
+    const basePrice = Number.parseFloat(tour.price);
     const totalPrice = basePrice * guests;
     const depositRate = 0.3; // 30% deposit for upfront
     const payAmount = payment_type === 'upfront' ? totalPrice * depositRate : totalPrice;
@@ -176,7 +176,7 @@ const getPaymentMethods = async (req, res) => {
 // @access  Private
 const addPaymentMethod = async (req, res) => {
   try {
-    const { card_number, card_brand, exp_month, exp_year, cardholder_name } = req.body;
+    const { card_number, card_brand, exp_month, exp_year } = req.body;
     const userId = req.user.user_id;
 
     // Extract last 4 digits

@@ -8,7 +8,6 @@ import 'features/auth/screens/login_screen.dart';
 import 'features/auth/screens/register_screen.dart';
 import 'features/auth/screens/forgot_password_screen.dart';
 import 'features/explore/presentation/provider/explore_provider.dart';
-import 'features/explore/presentation/screens/explore_screen.dart';
 import 'features/main/presentation/screens/main_screen.dart';
 import 'features/details/presentation/provider/detail_provider.dart';
 import 'features/search/presentation/provider/search_provider.dart';
