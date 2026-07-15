@@ -5,9 +5,11 @@ import 'package:mobile/features/trips/presentation/widgets/trip_card.dart';
 import 'package:mobile/features/trips/data/models/trip_models.dart';
 import 'package:mobile/features/details/presentation/provider/wishlist_provider.dart';
 import 'package:mobile/features/explore/presentation/widgets/tour_card.dart';
+import 'package:mobile/features/explore/presentation/widgets/experience_card.dart';
 import 'package:mobile/features/auth/providers/auth_provider.dart';
 import 'package:mobile/features/trips/presentation/screens/trip_detail_screen.dart';
 import 'package:mobile/features/trips/presentation/screens/create_trip_screen.dart';
+import 'package:mobile/features/details/presentation/screens/tour_detail_screen.dart';
 
 class TripsScreen extends StatefulWidget {
   const TripsScreen({super.key});
@@ -56,6 +58,12 @@ class _TripsScreenState extends State<TripsScreen> {
                       Image.network(
                         'https://ohdidi.vn/uploads/static/NEWS/blog/du%20lich%20da%20nang%20hoi%20an/du_lich_da_nang_hoi_an_2.png',
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          color: const Color(0xFF00CEA6),
+                          child: const Center(
+                            child: Icon(Icons.travel_explore, color: Colors.white, size: 64),
+                          ),
+                        ),
                       ),
                       Container(
                         decoration: BoxDecoration(
@@ -329,11 +337,27 @@ class _WishlistTabContentState extends State<WishlistTabContent> {
               return TourCard(
                 tour: tour,
                 isHorizontal: false,
-                onTap: () {}, // Navigate to tour detail
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TourDetailScreen(tourId: tour.id),
+                    ),
+                  ).then((_) {
+                    final auth = context.read<AuthProvider>();
+                    if (auth.token != null) {
+                      context.read<WishlistProvider>().fetchWishlist(auth.token!);
+                    }
+                  });
+                },
               );
             } else {
-              // Add Experience card if needed, or just tours for now
-              return const SizedBox.shrink();
+              final expIndex = index - provider.wishlistTours.length;
+              final experience = provider.wishlistExperiences[expIndex];
+              return ExperienceCard(
+                experience: experience,
+                onTap: () {},
+              );
             }
           },
         );
