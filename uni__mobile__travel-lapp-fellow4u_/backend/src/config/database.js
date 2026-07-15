@@ -21,7 +21,7 @@ const sequelize = new Sequelize(
     port: dbPort,
     dialect: 'postgres',
     logging: false,
-    dialectOptions: (process.env.DB_SSL === 'true' || process.env.RENDER === 'true' || process.env.NODE_ENV === 'production') ? {
+    dialectOptions: process.env.DB_SSL === 'true' ? {
       ssl: {
         require: true,
         rejectUnauthorized: false
