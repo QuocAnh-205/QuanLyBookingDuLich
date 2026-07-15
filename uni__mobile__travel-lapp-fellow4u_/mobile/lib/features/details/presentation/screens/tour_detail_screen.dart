@@ -4,8 +4,8 @@ import '../provider/detail_provider.dart';
 import '../widgets/detail_error_view.dart';
 import '../../../payment/presentation/screens/checkout_screen.dart';
 import '../../data/models/detail_models.dart';
-import '../../../../features/auth/providers/auth_provider.dart';
-import '../provider/wishlist_provider.dart';
+import 'package:mobile/features/auth/providers/auth_provider.dart';
+import 'package:mobile/features/details/presentation/provider/wishlist_provider.dart';
 
 class TourDetailScreen extends StatefulWidget {
   final int tourId;
@@ -53,11 +53,17 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildSocialBtn('Facebook', Icons.facebook, const Color(0xFF3B5998)),
-                  _buildSocialBtn('Google', Icons.g_mobiledata, const Color(0xFFEA4335)),
-                  _buildSocialBtn('Kakao Talk', Icons.chat_bubble, const Color(0xFFFFEB3B), iconColor: Colors.black87),
-                  _buildSocialBtn('WhatsApp', Icons.phone_android, const Color(0xFF25D366)),
-                  _buildSocialBtn('Twitter', Icons.chat, const Color(0xFF1DA1F2)),
+                  _buildSocialBtn(
+                      'Facebook', Icons.facebook, const Color(0xFF3B5998)),
+                  _buildSocialBtn(
+                      'Google', Icons.g_mobiledata, const Color(0xFFEA4335)),
+                  _buildSocialBtn(
+                      'Kakao Talk', Icons.chat_bubble, const Color(0xFFFFEB3B),
+                      iconColor: Colors.black87),
+                  _buildSocialBtn(
+                      'WhatsApp', Icons.phone_android, const Color(0xFF25D366)),
+                  _buildSocialBtn(
+                      'Twitter', Icons.chat, const Color(0xFF1DA1F2)),
                 ],
               ),
               const SizedBox(height: 32),
@@ -66,7 +72,8 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                 child: OutlinedButton(
                   onPressed: () => Navigator.pop(context),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFF00CEA6), width: 1.5),
+                    side:
+                        const BorderSide(color: Color(0xFF00CEA6), width: 1.5),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -89,7 +96,8 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
     );
   }
 
-  Widget _buildSocialBtn(String label, IconData icon, Color bgColor, {Color iconColor = Colors.white}) {
+  Widget _buildSocialBtn(String label, IconData icon, Color bgColor,
+      {Color iconColor = Colors.white}) {
     return Column(
       children: [
         Container(
@@ -104,7 +112,8 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
         const SizedBox(height: 8),
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w500),
+          style: const TextStyle(
+              fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w500),
         ),
       ],
     );
@@ -116,7 +125,8 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
       body: Consumer<DetailProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator(color: Color(0xFF00CEA6)));
+            return const Center(
+                child: CircularProgressIndicator(color: Color(0xFF00CEA6)));
           }
           if (provider.error != null) {
             return DetailErrorView(
@@ -135,7 +145,8 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                 pinned: true,
                 backgroundColor: Colors.white,
                 leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
+                  icon: const Icon(Icons.arrow_back_ios,
+                      color: Colors.white, size: 20),
                   onPressed: () => Navigator.pop(context),
                 ),
                 actions: [
@@ -160,7 +171,8 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                     },
                   ),
                   IconButton(
-                    icon: const Icon(Icons.bookmark_border, color: Colors.white),
+                    icon:
+                        const Icon(Icons.bookmark_border, color: Colors.white),
                     onPressed: () {},
                   ),
                 ],
@@ -172,17 +184,23 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                         PageView.builder(
                           itemCount: tour.images.length,
                           itemBuilder: (context, index) {
-                            return Image.network(tour.images[index].url, fit: BoxFit.cover);
+                            return Image.network(tour.images[index].url,
+                                fit: BoxFit.cover);
                           },
                         )
                       else
-                        Image.network(tour.basicInfo.thumbnailUrl, fit: BoxFit.cover),
+                        Image.network(tour.basicInfo.thumbnailUrl,
+                            fit: BoxFit.cover),
                       const DecoratedBox(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            colors: [Colors.black26, Colors.transparent, Colors.black45],
+                            colors: [
+                              Colors.black26,
+                              Colors.transparent,
+                              Colors.black45
+                            ],
                           ),
                         ),
                       ),
@@ -207,24 +225,33 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                               children: [
                                 Text(
                                   tour.basicInfo.title,
-                                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, height: 1.2),
+                                  style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.2),
                                 ),
                                 const SizedBox(height: 8),
                                 Row(
                                   children: [
                                     const Row(
                                       children: [
-                                        Icon(Icons.star, color: Colors.amber, size: 16),
-                                        Icon(Icons.star, color: Colors.amber, size: 16),
-                                        Icon(Icons.star, color: Colors.amber, size: 16),
-                                        Icon(Icons.star, color: Colors.amber, size: 16),
-                                        Icon(Icons.star, color: Colors.amber, size: 16),
+                                        Icon(Icons.star,
+                                            color: Colors.amber, size: 16),
+                                        Icon(Icons.star,
+                                            color: Colors.amber, size: 16),
+                                        Icon(Icons.star,
+                                            color: Colors.amber, size: 16),
+                                        Icon(Icons.star,
+                                            color: Colors.amber, size: 16),
+                                        Icon(Icons.star,
+                                            color: Colors.amber, size: 16),
                                       ],
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
                                       '${tour.provider?.rating ?? 4.8} (145 Reviews)',
-                                      style: const TextStyle(color: Colors.grey, fontSize: 13),
+                                      style: const TextStyle(
+                                          color: Colors.grey, fontSize: 13),
                                     ),
                                   ],
                                 ),
@@ -258,7 +285,9 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          const Text('Provider', style: TextStyle(color: Colors.grey, fontSize: 14)),
+                          const Text('Provider',
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 14)),
                           const SizedBox(width: 8),
                           Text(
                             tour.provider?.name ?? 'dulichviet',
@@ -270,9 +299,9 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Summary box
                       Container(
                         width: double.infinity,
@@ -294,26 +323,31 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                           children: [
                             const Text(
                               'Summary',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 16),
-                            _buildSummaryItem('Itinerary', tour.basicInfo.title),
-                            _buildSummaryItem('Duration', '${tour.basicInfo.durationDays} days, ${tour.basicInfo.durationDays} nights'),
+                            _buildSummaryItem(
+                                'Itinerary', tour.basicInfo.title),
+                            _buildSummaryItem('Duration',
+                                '${tour.basicInfo.durationDays} days, ${tour.basicInfo.durationDays} nights'),
                             _buildSummaryItem('Departure Date', 'Feb 12'),
-                            _buildSummaryItem('Departure Place', tour.pickupPoint ?? 'Ho Chi Minh'),
+                            _buildSummaryItem('Departure Place',
+                                tour.pickupPoint ?? 'Ho Chi Minh'),
                           ],
                         ),
                       ),
 
                       const SizedBox(height: 32),
-                      
+
                       // Schedule Section
                       const Text(
                         'Schedule',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
-                      
+
                       // Tabs for Days
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -330,7 +364,9 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                                   label: Text(
                                     'Day $day',
                                     style: TextStyle(
-                                      color: isSelected ? Colors.white : Colors.grey[700],
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.grey[700],
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -351,44 +387,54 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      
+
                       // Schedule list for selected day
                       ...tour.schedules
                           .where((s) => s.day == _selectedDay)
                           .map((s) => _buildScheduleItem(s)),
 
-                      if (tour.schedules.where((s) => s.day == _selectedDay).isEmpty)
+                      if (tour.schedules
+                          .where((s) => s.day == _selectedDay)
+                          .isEmpty)
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 20),
-                          child: Text('No schedule details for this day.', style: TextStyle(color: Colors.grey)),
+                          child: Text('No schedule details for this day.',
+                              style: TextStyle(color: Colors.grey)),
                         ),
 
                       const SizedBox(height: 24),
-                      
+
                       // Price Table
                       const Text(
                         'Price',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
                       Table(
-                        border: TableBorder.all(color: Colors.black12, borderRadius: BorderRadius.circular(8)),
+                        border: TableBorder.all(
+                            color: Colors.black12,
+                            borderRadius: BorderRadius.circular(8)),
                         columnWidths: const {
                           0: FlexColumnWidth(2),
                           1: FlexColumnWidth(1),
                         },
                         children: tour.agePricings.isNotEmpty
                             ? tour.agePricings.map((p) {
-                                final displayPrice = p.price == 0 ? 'Free' : '\$${p.price.toStringAsFixed(0)}.00';
+                                final displayPrice = p.price == 0
+                                    ? 'Free'
+                                    : '\$${p.price.toStringAsFixed(0)}.00';
                                 return _buildTableRow(p.label, displayPrice);
                               }).toList()
                             : [
-                                _buildTableRow('Adult (>10 years old)', '\$400.00'),
-                                _buildTableRow('Child (5 - 10 years old)', '\$320.00'),
+                                _buildTableRow(
+                                    'Adult (>10 years old)', '\$400.00'),
+                                _buildTableRow(
+                                    'Child (5 - 10 years old)', '\$320.00'),
                                 _buildTableRow('Child (<5 years old)', 'Free'),
                               ],
                       ),
-                      
+
                       const SizedBox(height: 100),
                     ],
                   ),
@@ -422,7 +468,8 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF00CEA6),
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                     elevation: 0,
                   ),
                   onPressed: () {
@@ -441,7 +488,10 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                   },
                   child: const Text(
                     'BOOK THIS TOUR',
-                    style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -462,13 +512,19 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
             width: 130,
             child: Text(
               label,
-              style: const TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ],

@@ -5,11 +5,9 @@ import 'package:mobile/features/trips/presentation/widgets/trip_card.dart';
 import 'package:mobile/features/trips/data/models/trip_models.dart';
 import 'package:mobile/features/details/presentation/provider/wishlist_provider.dart';
 import 'package:mobile/features/explore/presentation/widgets/tour_card.dart';
-import 'package:mobile/features/explore/presentation/widgets/experience_card.dart';
 import 'package:mobile/features/auth/providers/auth_provider.dart';
 import 'package:mobile/features/trips/presentation/screens/trip_detail_screen.dart';
 import 'package:mobile/features/trips/presentation/screens/create_trip_screen.dart';
-import 'package:mobile/features/details/presentation/screens/tour_detail_screen.dart';
 
 class TripsScreen extends StatefulWidget {
   const TripsScreen({super.key});
@@ -58,12 +56,6 @@ class _TripsScreenState extends State<TripsScreen> {
                       Image.network(
                         'https://ohdidi.vn/uploads/static/NEWS/blog/du%20lich%20da%20nang%20hoi%20an/du_lich_da_nang_hoi_an_2.png',
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          color: const Color(0xFF00CEA6),
-                          child: const Center(
-                            child: Icon(Icons.travel_explore, color: Colors.white, size: 64),
-                          ),
-                        ),
                       ),
                       Container(
                         decoration: BoxDecoration(
@@ -101,10 +93,22 @@ class _TripsScreenState extends State<TripsScreen> {
                       color: const Color(0xFF00CEA6),
                     ),
                     tabs: const [
-                      Tab(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Current Trips'))),
-                      Tab(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Next Trips'))),
-                      Tab(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Past Trips'))),
-                      Tab(child: Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Wish List'))),
+                      Tab(
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text('Current Trips'))),
+                      Tab(
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text('Next Trips'))),
+                      Tab(
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text('Past Trips'))),
+                      Tab(
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text('Wish List'))),
                     ],
                   ),
                 ),
@@ -146,7 +150,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => _tabBar.preferredSize.height + 16;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -185,7 +190,8 @@ class TripTabContent extends StatelessWidget {
         }
 
         if (provider.isLoading) {
-          return const Center(child: CircularProgressIndicator(color: Color(0xFF00CEA6)));
+          return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF00CEA6)));
         }
 
         if (tripsToShow.isEmpty) {
@@ -260,7 +266,8 @@ class TripTabContent extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
+            style: const TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
           const SizedBox(height: 8),
           Text(
@@ -304,10 +311,12 @@ class _WishlistTabContentState extends State<WishlistTabContent> {
     return Consumer<WishlistProvider>(
       builder: (context, provider, child) {
         if (provider.isLoading) {
-          return const Center(child: CircularProgressIndicator(color: Color(0xFF00CEA6)));
+          return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF00CEA6)));
         }
 
-        if (provider.wishlistTours.isEmpty && provider.wishlistExperiences.isEmpty) {
+        if (provider.wishlistTours.isEmpty &&
+            provider.wishlistExperiences.isEmpty) {
           return const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -316,7 +325,10 @@ class _WishlistTabContentState extends State<WishlistTabContent> {
                 SizedBox(height: 16),
                 Text(
                   'Your wishlist is empty',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
                 ),
                 SizedBox(height: 8),
                 Text(
@@ -330,34 +342,19 @@ class _WishlistTabContentState extends State<WishlistTabContent> {
 
         return ListView.builder(
           padding: const EdgeInsets.all(16),
-          itemCount: provider.wishlistTours.length + provider.wishlistExperiences.length,
+          itemCount: provider.wishlistTours.length +
+              provider.wishlistExperiences.length,
           itemBuilder: (context, index) {
             if (index < provider.wishlistTours.length) {
               final tour = provider.wishlistTours[index];
               return TourCard(
                 tour: tour,
                 isHorizontal: false,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TourDetailScreen(tourId: tour.id),
-                    ),
-                  ).then((_) {
-                    final auth = context.read<AuthProvider>();
-                    if (auth.token != null) {
-                      context.read<WishlistProvider>().fetchWishlist(auth.token!);
-                    }
-                  });
-                },
+                onTap: () {}, // Navigate to tour detail
               );
             } else {
-              final expIndex = index - provider.wishlistTours.length;
-              final experience = provider.wishlistExperiences[expIndex];
-              return ExperienceCard(
-                experience: experience,
-                onTap: () {},
-              );
+              // Add Experience card if needed, or just tours for now
+              return const SizedBox.shrink();
             }
           },
         );
