@@ -4,8 +4,6 @@ import '../provider/detail_provider.dart';
 import '../widgets/detail_error_view.dart';
 import '../../../payment/presentation/screens/checkout_screen.dart';
 import '../../data/models/detail_models.dart';
-import 'package:mobile/features/auth/providers/auth_provider.dart';
-import 'package:mobile/features/details/presentation/provider/wishlist_provider.dart';
 
 class TourDetailScreen extends StatefulWidget {
   final int tourId;
@@ -154,21 +152,10 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
                     icon: const Icon(Icons.share_outlined, color: Colors.white),
                     onPressed: () => _showSharePopup(context),
                   ),
-                  Consumer2<AuthProvider, WishlistProvider>(
-                    builder: (context, auth, wishlist, _) {
-                      final isFav = wishlist.isFavorite(tour.basicInfo.id, isTour: true);
-                      return IconButton(
-                        icon: Icon(
-                          isFav ? Icons.favorite : Icons.favorite_border,
-                          color: isFav ? Colors.red : Colors.white,
-                        ),
-                        onPressed: () {
-                          if (auth.token != null) {
-                            wishlist.toggleWishlist(auth.token!, tourId: tour.basicInfo.id);
-                          }
-                        },
-                      );
-                    },
+                  IconButton(
+                    icon:
+                        const Icon(Icons.favorite_border, color: Colors.white),
+                    onPressed: () {},
                   ),
                   IconButton(
                     icon:

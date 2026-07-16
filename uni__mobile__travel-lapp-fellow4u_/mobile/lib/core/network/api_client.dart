@@ -6,8 +6,8 @@ class ApiClient {
       // http://localhost:3000/api/ dành cho Web/iOS Simulator
       // http://10.0.2.2:3000/api/ dành cho Android Emulator
       baseUrl: 'https://quanlybookingdulich.onrender.com/api/',
-      connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 3),
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
